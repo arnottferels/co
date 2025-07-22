@@ -56,7 +56,12 @@ jobs:
       - name: Copy built files from target repo
         run: |
           mkdir -p "$OUTPUT_DIR/${{ secrets.TABLE_NAME }}"
-          cp -r "$REPO_DIR/$REMOTE_DIR/"* "$OUTPUT_DIR"
+          if [ -d "$REPO_DIR/$REMOTE_DIR" ] && [ "$(ls -A "$REPO_DIR/$REMOTE_DIR")" ]; then
+            cp -r "$REPO_DIR/$REMOTE_DIR/"* "$OUTPUT_DIR"
+          else
+            echo "No files to copy."
+          fi
+
 
       - name: Commit and push updated files
         run: |
